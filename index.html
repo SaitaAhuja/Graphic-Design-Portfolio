@@ -43,20 +43,21 @@ position: relative;
 background: var(--bg);
 }
 
-/* ALL 12 STICKERS WITH BLENDING TO MATCH BACKGROUND */
+/* PERFECT CAMOUFLAGED STICKERS (Blend Mode + Matching Shadow) */
 .hero-sticker {
 position: absolute;
 width: 58px;
 height: auto;
 mix-blend-mode: multiply;
-opacity: 0.82;
+opacity: 0.94;
 pointer-events: none;
 z-index: 2;
-filter: drop-shadow(0 2px 4px rgba(62,50,56,0.05)) sepia(0.15) hue-rotate(5deg);
+filter: drop-shadow(0 2px 4px rgba(62,50,56,0.05));
+transition: transform 0.3s ease;
 }
-.hero-sticker img { width: 100%; height: auto; display: block; }
+.hero-sticker img { width: 100%; height: auto; display: block; background: transparent; }
 
-/* Balanced coordinates & updated larger sizes for girl, yapper, and delulu */
+/* Balanced coordinates & updated sizes */
 .hs-boba { top: 12%; left: 8%; transform: rotate(-12deg); }
 .hs-bunny { top: 13%; right: 9%; transform: rotate(14deg); width: 50px;}
 .hs-cat { top: 43%; left: 3%; transform: rotate(-8deg); width: 62px; }
@@ -166,7 +167,6 @@ padding-right: 2px;
 .fb-skills{ top:6%; right:3%; }
 .fb-interests{ bottom:2%; left:2%; }
 .fb-experience{ bottom:2%; right:2%; z-index: 12; }
-
 .fb-design{ top:38%; left:-2%; }
 .fb-tools-right{ top:40%; right:-1%; }
 
@@ -178,6 +178,35 @@ padding-right: 2px;
 .fb-tools-right{ animation-delay:2.5s; }
 .fb-interests{ animation-delay:3s; }
 .flower-btn:hover{ animation:none; }
+
+/* ---------- ELEGANT SVG VECTOR OUTLINE BOW TRAIL (Slower, Smooth, Aesthetic) ---------- */
+.trail-bow {
+position: fixed;
+pointer-events: none;
+z-index: 9999;
+width: 32px;
+height: 32px;
+user-select: none;
+transform: translate(-50%, -50%) scale(0.2) rotate(-15deg);
+opacity: 0;
+transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.8s ease;
+}
+
+.trail-bow svg {
+width: 100%;
+height: 100%;
+fill: none;
+stroke: #B5654A;
+stroke-width: 2.2;
+stroke-linecap: round;
+stroke-linejoin: round;
+filter: drop-shadow(0 2px 4px rgba(62,50,56,0.08));
+}
+
+.trail-bow.active {
+opacity: 0.9;
+transform: translate(-50%, -50%) scale(1) rotate(12deg);
+}
 
 /* ---------- Top Header Block ---------- */
 .header-wrap{
@@ -317,7 +346,7 @@ transition: transform 0.3s ease, background 0.3s ease;
 }
 .cta-btn:hover{ transform:translateY(-3px); background:var(--accent); }
 
-/* ================= GALLERY PAGE ================= */
+/* ================= GALLERY PAGE (UNTOUCHED / PRESERVED) ================= */
 .gallery-page-inner{
 min-height:100vh;
 display:flex; flex-direction:column; align-items:center; justify-content:center;
@@ -531,7 +560,6 @@ width: 100%; height: 100%; object-fit: cover; border-radius: 18px 10px 18px 10px
 
   .hero-sticker {
     width: 35px !important;
-    opacity: 0.7;
   }
   .hs-delulu, .hs-girl, .hs-yapper {
     width: 50px !important;
@@ -564,46 +592,23 @@ width: 100%; height: 100%; object-fit: cover; border-radius: 18px 10px 18px 10px
     transform: none;
   }
 
+  .gallery-page-inner {
+    justify-content: flex-start;
+    padding: 80px 15px 40px;
+  }
+
   .gallery-title {
-    font-size: 26px;
+    font-size: 24px;
   }
   .gallery-sub {
     font-size: 11px;
   }
+
   .layout-marquee-wrapper {
-    padding: 20px 0;
+    padding: 0;
     mask-image: none;
     -webkit-mask-image: none;
-  }
-
-  .layout-marquee-track {
-    animation: none;
-    display: grid;
-    grid-template-columns: 1fr;
-    width: 100%;
-    justify-items: center;
-  }
-
-  .gallery-layout:last-child {
-    display: none;
-  }
-
-  .gallery-layout {
-    flex-direction: column;
-    gap: 30px;
-    width: 100%;
-  }
-
-  .scattered-board {
-    grid-template-columns: 220px;
-    grid-template-rows: repeat(6, 270px);
-    gap: 30px;
-  }
-
-  .side-col {
-    gap: 30px;
-    width: 100%;
-    align-items: center;
+    overflow-y: visible;
   }
 
   .gallery-header-static {
@@ -611,8 +616,51 @@ width: 100%; height: 100%; object-fit: cover; border-radius: 18px 10px 18px 10px
     top: auto;
     left: auto;
     transform: none;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
     pointer-events: auto;
+  }
+
+  .layout-marquee-track {
+    animation: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 20px !important;
+    transform: none !important;
+  }
+
+  .gallery-layout {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 20px !important;
+    width: 100% !important;
+  }
+
+  .gallery-layout:last-child {
+    display: none !important;
+  }
+
+  .scattered-board {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 20px !important;
+    width: 100% !important;
+  }
+
+  .side-col {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 20px !important;
+    width: 100% !important;
+  }
+
+  .work-card {
+    width: 100% !important;
+    max-width: 320px;
+    margin: 0 auto;
+    height: auto !important;
+    min-height: 270px;
+    transform: none !important;
   }
 }
 
@@ -624,7 +672,7 @@ width: 100%; height: 100%; object-fit: cover; border-radius: 18px 10px 18px 10px
 <div class="page" id="hero-page">
 <section class="hero">
 
-<!-- All 12 Stickers (Girl, Yapper, & Delulu size increased) -->
+<!-- Perfectly Camouflaged Original Stickers -->
 <div class="hero-sticker hs-boba"><img src="boba.png" alt="boba sticker"></div>
 <div class="hero-sticker hs-bunny"><img src="bunny.png" alt="bunny sticker"></div>
 <div class="hero-sticker hs-cat"><img src="cat.png" alt="cat sticker"></div>
@@ -647,7 +695,7 @@ width: 100%; height: 100%; object-fit: cover; border-radius: 18px 10px 18px 10px
 <button class="pastel-pill-btn"><span class="btn-main">Lets Connect</span></button>
 <div class="pastel-dropdown">
 <div class="pastel-dropdown-title">Make Magic Happen</div>
-<a href="mailto:saitaahuja4@gmail.com" class="connect-link-item">Email Me <span>↗</span></a>
+<a href="mailto:saitaahuja.work@gmail.com" class="connect-link-item">Email Me <span>↗</span></a>
 <a href="https://www.linkedin.com/in/saita-ahuja-329bb6270" target="_blank" rel="noopener noreferrer" class="connect-link-item">LinkedIn <span>↗</span></a>
 </div>
 </div>
@@ -812,7 +860,7 @@ width: 100%; height: 100%; object-fit: cover; border-radius: 18px 10px 18px 10px
 <div class="card-img-box"><img src="overall.png" alt="Brand System"></div>
 <div class="card-fill">Brand System</div>
 </div>
-<div class="work-card c-6" tabindex="0" data-caption="Juicy fruit explosion - refreshing summer treats ad poster" style="background: linear-gradient(155deg,#EFE2D3,#D6A084);">
+<div class="work-card c-6" tabindex="0" data-caption="Jersey fruit explosion - refreshing summer treats ad poster" style="background: linear-gradient(155deg,#EFE2D3,#D6A084);">
 <div class="card-img-box"><img src="POPSICLE.png" alt="Frost Popsicle"></div>
 <div class="card-fill">Frost Popsicles</div>
 </div>
@@ -910,6 +958,45 @@ zoomImg.addEventListener("click", closeZoom);
 
 document.addEventListener("keydown",function(e){
     if(e.key==="Escape") closeZoom();
+});
+
+/* ---------- Standalone Pure Outline Vector Bow Floating Trail (Slow & Smooth) ---------- */
+let lastX = 0, lastY = 0;
+let throttleTimer = false;
+
+document.addEventListener('mousemove', (e) => {
+const distance = Math.hypot(e.clientX - lastX, e.clientY - lastY);
+if (distance > 65 && !throttleTimer) { // Increased distance threshold to make it less frantic
+lastX = e.clientX;
+lastY = e.clientY;
+throttleTimer = true;
+
+const trailBow = document.createElement('div');
+trailBow.className = 'trail-bow';
+// Clean, elegant standalone SVG outline bow vector instead of a cheap emoji
+trailBow.innerHTML = `<svg viewBox="0 0 24 24"><path d="M12 12c-3-4-8-4-8-1s5 3 8 1z"/><path d="M12 12c3-4 8-4 8-1s-5 3-8 1z"/><path d="M10.5 13.5l-3 6m3-6l3 6"/></svg>`;
+trailBow.style.left = e.clientX + 'px';
+trailBow.style.top = e.clientY + 'px';
+document.body.appendChild(trailBow);
+
+// Trigger transition on next frame
+requestAnimationFrame(() => {
+trailBow.classList.add('active');
+});
+
+setTimeout(() => {
+trailBow.style.transform = `translate(-50%, -70px) scale(0.6) rotate(${Math.random() * 40 - 20}deg)`;
+trailBow.style.opacity = '0';
+}, 100);
+
+setTimeout(() => {
+trailBow.remove();
+}, 900); // Slower, graceful fade out duration
+
+setTimeout(() => {
+throttleTimer = false;
+}, 220); // Slower spawn rate
+}
 });
 </script>
 
