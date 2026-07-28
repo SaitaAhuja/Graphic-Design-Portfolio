@@ -300,12 +300,13 @@ background: var(--accent);
 color: #fff;
 }
 
-/* ---------- Bottom CTA Wrap ---------- */
+/* ---------- Bottom CTA Wrap (Moved back to bottom, but slightly higher up) ---------- */
 .cta-wrap{
 text-align:center;
-margin-top: 5px;
+margin-top: -70px;
 position: relative;
-z-index: 10;
+z-index: 15;
+transform: translateX(25px);
 }
 .cta-btn{
 font-family:'Work Sans', sans-serif; font-weight:500; font-size:14px;
@@ -421,10 +422,19 @@ transition: transform 0.35s cubic-bezier(.2,.9,.25,1), box-shadow 0.35s ease, z-
 transform: translateY(var(--offset, 0px));
 }
 
+@media (hover: hover) {
 .work-card:hover, .work-card:focus-visible{
 transform: translateY(calc(var(--offset, 0px) - 10px)) scale(1.08) !important;
 box-shadow: 0 20px 38px -12px rgba(62,50,56,0.32);
 z-index: 15 !important;
+}
+}
+
+@media (hover: none) {
+.work-card:hover {
+transform: translateY(var(--offset, 0px)) !important;
+box-shadow: 0 10px 22px -10px rgba(62,50,56,0.18);
+}
 }
 
 .card-img-box{
@@ -519,7 +529,6 @@ width: 100%; height: 100%; object-fit: cover; border-radius: 18px 10px 18px 10px
     font-size: 15px;
   }
 
-  /* Reduce sticker sizes slightly on mobile to prevent clutter */
   .hero-sticker {
     width: 35px !important;
     opacity: 0.7;
@@ -528,7 +537,6 @@ width: 100%; height: 100%; object-fit: cover; border-radius: 18px 10px 18px 10px
     width: 50px !important;
   }
 
-  /* Make flowers compact on mobile */
   .flower-btn {
     width: 90px;
     height: 90px;
@@ -537,7 +545,6 @@ width: 100%; height: 100%; object-fit: cover; border-radius: 18px 10px 18px 10px
     font-size: 9px;
   }
 
-  /* Expand flowers cleanly on tap/focus for mobile */
   .flower-btn:active, .flower-btn:focus-within {
     width: 220px;
     height: 160px;
@@ -552,7 +559,6 @@ width: 100%; height: 100%; object-fit: cover; border-radius: 18px 10px 18px 10px
     pointer-events: auto;
   }
 
-  /* Adjust gallery marquee tracking & header for mobile */
   .gallery-title {
     font-size: 26px;
   }
@@ -807,24 +813,42 @@ const stage = document.getElementById('zoomStage');
 const zoomImg = document.getElementById('zoomImg');
 const caption = document.getElementById('zoomCaption');
 
-document.querySelectorAll('.work-card').forEach(card=>{
-const show = (_, cardEl = card)=>{
-if(window.innerWidth <= 960) return;
+function openZoom(cardEl) {
 const imgSrc = cardEl.querySelector('img').src;
 zoomImg.src = imgSrc;
 caption.textContent = cardEl.dataset.caption;
 backdrop.classList.add('active');
 stage.classList.add('active');
-};
-const hide = ()=>{
+}
+
+function closeZoom() {
 backdrop.classList.remove('active');
 stage.classList.remove('active');
-};
-card.addEventListener('mouseenter', (e) => show(e, card));
-card.addEventListener('mouseleave', hide);
-card.addEventListener('focus', (e) => show(e, card));
-card.addEventListener('blur', hide);
+}
+
+document.querySelectorAll('.work-card').forEach(card => {
+card.addEventListener('mouseenter', (e) => {
+if (window.innerWidth > 960) openZoom(card);
 });
+card.addEventListener('mouseleave', () => {
+if (window.innerWidth > 960) closeZoom();
+});
+card.addEventListener('focus', (e) => {
+if (window.innerWidth > 960) openZoom(card);
+});
+card.addEventListener('blur', () => {
+if (window.innerWidth > 960) closeZoom();
+});
+
+card.addEventListener('click', (e) => {
+if (window.innerWidth <= 960) {
+e.stopPropagation();
+openZoom(card);
+}
+});
+});
+
+backdrop.addEventListener('click', closeZoom);
 </script>
 
 </body>
