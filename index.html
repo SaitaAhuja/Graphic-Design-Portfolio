@@ -188,7 +188,7 @@ height: 36px;
 user-select: none;
 transform: translate(-50%, -50%) scale(0.3) rotate(-15deg);
 opacity: 0;
-transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease;
+transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.8s ease;
 }
 
 .trail-bow svg {
@@ -902,16 +902,20 @@ document.addEventListener("keydown",function(e){
     if(e.key==="Escape") closeZoom();
 });
 
-/* ---------- Flawless Continuous Mobile & Desktop Bow Trail (PAGE 1 ONLY) ---------- */
-let pointerX = window.innerWidth / 2;
-let pointerY = window.innerHeight / 2;
-let lastSpawnX = pointerX;
-let lastSpawnY = pointerY;
-let isPointerActive = false;
+/* ---------- SMOOTH & SLOWED DOWN MOBILE/DESKTOP BOW TRAIL ---------- */
+let activeX = window.innerWidth / 2;
+let activeY = window.innerHeight / 2;
+let trackingActive = false;
+let lastSpawnTime = 0;
 
 function spawnBow(x, y) {
 const heroPage = document.getElementById('hero-page');
 if (!heroPage || heroPage.style.display === 'none') return;
+
+const now = Date.now();
+// Throttle frequency so bows drop slower and cleaner
+if (now - lastSpawnTime < 110) return; 
+lastSpawnTime = now;
 
 const trailBow = document.createElement('div');
 trailBow.className = 'trail-bow';
@@ -925,56 +929,51 @@ trailBow.classList.add('active');
 });
 
 setTimeout(() => {
-trailBow.style.transform = `translate(-50%, -60px) scale(0.5) rotate(${Math.random() * 50 - 25}deg)`;
+trailBow.style.transform = `translate(-50%, -40px) scale(0.5) rotate(${Math.random() * 40 - 20}deg)`;
 trailBow.style.opacity = '0';
-}, 100);
+}, 300);
 
 setTimeout(() => {
 trailBow.remove();
-}, 600);
+}, 900);
 }
 
-// Unified Pointer Trackers
+// Mouse Event
 window.addEventListener('mousemove', (e) => {
-pointerX = e.clientX;
-pointerY = e.clientY;
-isPointerActive = true;
+activeX = e.clientX;
+activeY = e.clientY;
+trackingActive = true;
 });
 
+// Touch Events
 window.addEventListener('touchstart', (e) => {
 if(e.touches && e.touches[0]){
-pointerX = e.touches[0].clientX;
-pointerY = e.touches[0].clientY;
-isPointerActive = true;
-spawnBow(pointerX, pointerY);
-lastSpawnX = pointerX;
-lastSpawnY = pointerY;
+activeX = e.touches[0].clientX;
+activeY = e.touches[0].clientY;
+trackingActive = true;
+spawnBow(activeX, activeY);
 }
 }, {passive: true});
 
 window.addEventListener('touchmove', (e) => {
 if(e.touches && e.touches[0]){
-pointerX = e.touches[0].clientX;
-pointerY = e.touches[0].clientY;
-isPointerActive = true;
+activeX = e.touches[0].clientX;
+activeY = e.touches[0].clientY;
+trackingActive = true;
+spawnBow(activeX, activeY);
 }
 }, {passive: true});
 
-window.addEventListener('touchend', () => { isPointerActive = false; });
-window.addEventListener('touchcancel', () => { isPointerActive = false; });
+window.addEventListener('touchend', () => { trackingActive = false; });
+window.addEventListener('touchcancel', () => { trackingActive = false; });
 
-// Unbreakable high-frequency interval emission loop for mobile and desktop consistency
+// Slowed down interval loop for desktop
 setInterval(() => {
 const heroPage = document.getElementById('hero-page');
-if (heroPage && heroPage.style.display !== 'none' && isPointerActive) {
-const dist = Math.hypot(pointerX - lastSpawnX, pointerY - lastSpawnY);
-if (dist > 18) {
-spawnBow(pointerX, pointerY);
-lastSpawnX = pointerX;
-lastSpawnY = pointerY;
+if (heroPage && heroPage.style.display !== 'none' && trackingActive && !('ontouchstart' in window)) {
+spawnBow(activeX, activeY);
 }
-}
-}, 30);
+}, 120);
 </script>
 
 </body>
