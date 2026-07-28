@@ -188,7 +188,7 @@ height: 36px;
 user-select: none;
 transform: translate(-50%, -50%) scale(0.3) rotate(-15deg);
 opacity: 0;
-transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.6s ease;
+transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease;
 }
 
 .trail-bow svg {
@@ -902,11 +902,12 @@ document.addEventListener("keydown",function(e){
     if(e.key==="Escape") closeZoom();
 });
 
-/* ---------- Standalone Pure Outline Vector Bow Floating Trail (PAGE 1 ONLY) - Optimized Mobile Touch Emission ---------- */
-let lastX = 0, lastY = 0;
-let currentX = 0, currentY = 0;
-let isTouching = false;
-let throttleTimer = false;
+/* ---------- Flawless Continuous Mobile & Desktop Bow Trail (PAGE 1 ONLY) ---------- */
+let pointerX = window.innerWidth / 2;
+let pointerY = window.innerHeight / 2;
+let lastSpawnX = pointerX;
+let lastSpawnY = pointerY;
+let isPointerActive = false;
 
 function spawnBow(x, y) {
 const heroPage = document.getElementById('hero-page');
@@ -924,69 +925,56 @@ trailBow.classList.add('active');
 });
 
 setTimeout(() => {
-trailBow.style.transform = `translate(-50%, -70px) scale(0.6) rotate(${Math.random() * 40 - 20}deg)`;
+trailBow.style.transform = `translate(-50%, -60px) scale(0.5) rotate(${Math.random() * 50 - 25}deg)`;
 trailBow.style.opacity = '0';
-}, 80);
+}, 100);
 
 setTimeout(() => {
 trailBow.remove();
-}, 700);
+}, 600);
 }
 
-// Mouse tracking
-document.addEventListener('mousemove', (e) => {
-const heroPage = document.getElementById('hero-page');
-if (!heroPage || heroPage.style.display === 'none') return;
-
-const distance = Math.hypot(e.clientX - lastX, e.clientY - lastY);
-if (distance > 35 && !throttleTimer) {
-lastX = e.clientX;
-lastY = e.clientY;
-throttleTimer = true;
-spawnBow(e.clientX, e.clientY);
-setTimeout(() => { throttleTimer = false; }, 120);
-}
+// Unified Pointer Trackers
+window.addEventListener('mousemove', (e) => {
+pointerX = e.clientX;
+pointerY = e.clientY;
+isPointerActive = true;
 });
 
-// Optimized Touch Tracking
-document.addEventListener('touchstart', (e) => {
-if (e.touches && e.touches[0]) {
-isTouching = true;
-currentX = e.touches[0].clientX;
-currentY = e.touches[0].clientY;
-lastX = currentX;
-lastY = currentY;
-spawnBow(currentX, currentY);
+window.addEventListener('touchstart', (e) => {
+if(e.touches && e.touches[0]){
+pointerX = e.touches[0].clientX;
+pointerY = e.touches[0].clientY;
+isPointerActive = true;
+spawnBow(pointerX, pointerY);
+lastSpawnX = pointerX;
+lastSpawnY = pointerY;
 }
 }, {passive: true});
 
-document.addEventListener('touchmove', (e) => {
-if (e.touches && e.touches[0]) {
-isTouching = true;
-currentX = e.touches[0].clientX;
-currentY = e.touches[0].clientY;
+window.addEventListener('touchmove', (e) => {
+if(e.touches && e.touches[0]){
+pointerX = e.touches[0].clientX;
+pointerY = e.touches[0].clientY;
+isPointerActive = true;
 }
 }, {passive: true});
 
-document.addEventListener('touchend', () => { isTouching = false; });
-document.addEventListener('touchcancel', () => { isTouching = false; });
+window.addEventListener('touchend', () => { isPointerActive = false; });
+window.addEventListener('touchcancel', () => { isPointerActive = false; });
 
-// Continuous smooth touch loop for mobile tracking under finger
-function mobileLoop() {
+// Unbreakable high-frequency interval emission loop for mobile and desktop consistency
+setInterval(() => {
 const heroPage = document.getElementById('hero-page');
-if (heroPage && heroPage.style.display !== 'none' && isTouching) {
-const distance = Math.hypot(currentX - lastX, currentY - lastY);
-if (distance > 15 && !throttleTimer) {
-lastX = currentX;
-lastY = currentY;
-throttleTimer = true;
-spawnBow(currentX, currentY);
-setTimeout(() => { throttleTimer = false; }, 60);
+if (heroPage && heroPage.style.display !== 'none' && isPointerActive) {
+const dist = Math.hypot(pointerX - lastSpawnX, pointerY - lastSpawnY);
+if (dist > 18) {
+spawnBow(pointerX, pointerY);
+lastSpawnX = pointerX;
+lastSpawnY = pointerY;
 }
 }
-requestAnimationFrame(mobileLoop);
-}
-requestAnimationFrame(mobileLoop);
+}, 30);
 </script>
 
 </body>
