@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saita Ahuja's Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+--bg:#F5EDE6;
+--card:#EFE2D3;
+--ink:#3E3238;
+--ink-soft:#8A7A80;
+--accent:#B5654A;
+--petal:#E7C3AA;
+--petal2:#D6A084;
+--line:#E2D3C4;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{scroll-behavior:smooth;}
+body{
+background:var(--bg);
+color:var(--ink);
+font-family:'Work Sans', sans-serif;
+min-height:100vh;
+overflow-x:hidden;
+}
+::selection{ background:var(--petal); color:var(--ink); }
+
+.page{ min-height:100vh; position:relative; background:var(--bg); }
+#gallery-page{ display:none; }
+.fade-in{ animation: fadeIn 0.6s ease both; }
+@keyframes fadeIn{ from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
+
+/* ================= HERO ================= */
+.hero{
+min-height:100vh;
+display:flex; flex-direction:column; align-items:center; justify-content:center;
+padding:40px 20px 30px;
+overflow: hidden;
+position: relative;
+background: var(--bg);
+}
+
+/* ALL 12 STICKERS WITH BLENDING TO MATCH BACKGROUND */
+.hero-sticker {
+position: absolute;
+width: 58px;
+height: auto;
+mix-blend-mode: multiply;
+opacity: 0.82;
+pointer-events: none;
+z-index: 2;
+filter: drop-shadow(0 2px 4px rgba(62,50,56,0.05)) sepia(0.15) hue-rotate(5deg);
+}
+.hero-sticker img { width: 100%; height: auto; display: block; }
+
+/* Balanced coordinates & updated larger sizes for girl, yapper, and delulu */
+.hs-boba { top: 12%; left: 8%; transform: rotate(-12deg); }
+.hs-bunny { top: 13%; right: 9%; transform: rotate(14deg); width: 50px;}
+.hs-cat { top: 43%; left: 3%; transform: rotate(-8deg); width: 62px; }
+.hs-chai { top: 40%; right: 4%; transform: rotate(10deg); width: 60px; }
+.hs-delulu { bottom: 25%; left: 5%; transform: rotate(18deg); width: 78px; }
+.hs-bear { bottom: 11%; left: 11%; transform: rotate(-8deg); width: 50px; }
+.hs-girl { bottom: 40%; right: 13%; transform: rotate(-10deg); width: 82px; }
+.hs-pills { top: 62%; right: 4%; transform: rotate(-15deg); width: 54px; }
+.hs-camera { bottom: 13%; right: 9%; transform: rotate(12deg); width: 58px; }
+.hs-rainbow { top: 32%; left: 14%; transform: rotate(5deg); width: 65px; }
+.hs-tulip { top: 32%; right: 14%; transform: rotate(-6deg); width: 52px; }
+.hs-yapper { top: 55%; left: 11%; transform: rotate(3deg); width: 76px;}
+
+.hero-stage{
+position:relative;
+width:min(640px, 94vw);
+height:min(640px, 94vw);
+display:flex; align-items:center; justify-content:center;
+margin-top: -30px;
+z-index: 5;
+}
+
+/* center portrait */
+.portrait{
+width:380px; height:460px;
+border-radius: 0;
+border: none;
+outline: none;
+overflow:hidden;
+background: transparent;
+position:relative; z-index:6;
+}
+.portrait img, .portrait video{
+width:100%; height:100%;
+object-fit:cover; display:block;
+border: none;
+outline: none;
+}
+
+/* ---------- flower buttons ---------- */
+.flower-btn{
+position:absolute;
+width:125px; height:125px;
+display:flex; align-items:center; justify-content:center;
+cursor:pointer;
+z-index:7;
+transition: width 0.5s cubic-bezier(.2,.9,.25,1), height 0.5s cubic-bezier(.2,.9,.25,1);
+}
+.petals{
+position:absolute; inset:0;
+transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.petal{
+position:absolute; width:58%; height:58%; left:21%; top:21%;
+border-radius:50% 50% 50% 4%;
+background: linear-gradient(160deg, var(--petal), var(--petal2));
+box-shadow: 0 10px 22px -12px rgba(62,50,56,0.3);
+}
+.petal:nth-child(1){ transform:rotate(0deg) translateY(-32%); }
+.petal:nth-child(2){ transform:rotate(72deg) translateY(-32%); }
+.petal:nth-child(3){ transform:rotate(144deg) translateY(-32%); }
+.petal:nth-child(4){ transform:rotate(216deg) translateY(-32%); }
+.petal:nth-child(5){ transform:rotate(288deg) translateY(-32%); }
+.flower-center{
+position:absolute; width:34%; height:34%; left:33%; top:33%;
+border-radius:50%; background:#fff; z-index:2;
+display:flex; align-items:center; justify-content:center;
+box-shadow: 0 6px 14px -6px rgba(62,50,56,0.25);
+}
+.flower-label{
+font-family:'Fraunces', serif; font-style:italic; font-weight:500;
+font-size:10px; color:var(--accent); text-align:center; line-height:1.1;
+padding: 0 2px;
+}
+
+.flower-content{
+position:absolute; inset:0;
+border-radius: 26px 14px 26px 14px;
+background:var(--card);
+box-shadow:0 25px 45px -20px rgba(62,50,56,0.35);
+display:flex; flex-direction:column; align-items:center; justify-content:center;
+text-align:center; padding:12px;
+opacity:0; pointer-events:none;
+transition: opacity 0.4s ease 0.1s;
+overflow-y: hidden;
+z-index: 25;
+}
+.flower-content .fc-title{
+font-family:'Fraunces', serif; font-style:italic; font-weight:600; font-size:13.5px;
+color:var(--accent); margin-bottom:4px;
+}
+.flower-content .fc-text{ 
+font-size:10.5px; 
+line-height:1.4; 
+color:var(--ink); 
+max-height: 100%;
+overflow-y: hidden;
+padding-right: 2px;
+}
+
+.flower-btn:hover, .flower-btn:focus-within{ width:265px; height:195px; z-index:30; }
+.flower-btn:hover .petals, .flower-btn:focus-within .petals{ opacity:0; transform:scale(0.6); }
+.flower-btn:hover .flower-content, .flower-btn:focus-within .flower-content{ opacity:1; pointer-events:auto; }
+
+/* Flower positions */
+.fb-about{ top:3%; left:5%; }
+.fb-skills{ top:6%; right:3%; }
+.fb-interests{ bottom:2%; left:2%; }
+.fb-experience{ bottom:2%; right:2%; z-index: 12; }
+
+.fb-design{ top:38%; left:-2%; }
+.fb-tools-right{ top:40%; right:-1%; }
+
+@keyframes bob{ 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(-10px);} }
+.flower-btn{ animation: bob 6s ease-in-out infinite; }
+.fb-skills{ animation-delay:1s; }
+.fb-design{ animation-delay:1.5s; }
+.fb-experience{ animation-delay:2s; }
+.fb-tools-right{ animation-delay:2.5s; }
+.fb-interests{ animation-delay:3s; }
+.flower-btn:hover{ animation:none; }
+
+/* ---------- Top Header Block ---------- */
+.header-wrap{
+text-align:center;
+margin-bottom:10px;
+z-index: 15;
+position: relative;
+}
+.name-line{
+font-family:'Fraunces', serif;
+font-style:italic;
+font-weight:500;
+font-size:48px;
+margin-bottom:8px;
+}
+.eyebrow-line{
+font-size:18px;
+letter-spacing:0.18em;
+text-transform:uppercase;
+color:var(--ink-soft);
+margin-bottom:10px;
+}
+.hook-line{
+font-family:'Fraunces', serif;
+font-style:italic;
+font-weight:400;
+font-size:20px;
+color:var(--ink-soft);
+margin-bottom: 12px;
+}
+
+/* ---------- Pastel Pill Contact Trigger ---------- */
+.pastel-connect-wrapper{
+display: inline-block;
+position: relative;
+margin-top: 4px;
+z-index: 50;
+}
+
+.pastel-pill-btn{
+background: var(--card);
+border: 1px solid var(--line);
+font-family: 'Fraunces', serif;
+font-style: italic;
+font-weight: 500;
+font-size: 14px;
+color: var(--accent);
+padding: 10px 22px;
+border-radius: 999px;
+cursor: pointer;
+box-shadow: 0 4px 15px -4px rgba(62, 50, 56, 0.15);
+transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease;
+display: inline-flex;
+flex-direction: column;
+align-items: center;
+gap: 1px;
+line-height: 1.2;
+}
+
+.pastel-pill-btn .btn-main{
+font-weight: 700;
+font-size: 15px;
+}
+
+.pastel-dropdown{
+position: absolute;
+top: calc(100% + 8px);
+left: 50%;
+transform: translateX(-50%) translateY(-6px);
+background: var(--card);
+border: 1px solid var(--line);
+border-radius: 16px;
+padding: 14px 18px;
+width: 230px;
+box-shadow: 0 -15px 30px -10px rgba(62,50,56,0.25);
+display: flex;
+flex-direction: column;
+gap: 8px;
+opacity: 0;
+pointer-events: none;
+transition: opacity 0.3s ease, transform 0.3s ease;
+text-align: left;
+z-index: 60;
+}
+
+.pastel-connect-wrapper:hover .pastel-dropdown,
+.pastel-connect-wrapper:focus-within .pastel-dropdown{
+opacity: 1;
+pointer-events: auto;
+transform: translateX(-50%) translateY(0);
+}
+
+.pastel-dropdown-title{
+font-family: 'Fraunces', serif;
+font-style: italic;
+font-size: 13px;
+color: var(--accent);
+font-weight: 600;
+text-align: center;
+margin-bottom: 2px;
+}
+
+.connect-link-item{
+background: var(--bg);
+color: var(--ink);
+text-decoration: none;
+padding: 7px 10px;
+border-radius: 8px;
+font-size: 12px;
+font-weight: 500;
+border: 1px solid var(--line);
+display: flex;
+align-items: center;
+justify-content: space-between;
+transition: background 0.2s, color 0.2s;
+}
+
+.connect-link-item:hover{
+background: var(--accent);
+color: #fff;
+}
+
+/* ---------- Bottom CTA Wrap ---------- */
+.cta-wrap{
+text-align:center;
+margin-top: 5px;
+position: relative;
+z-index: 10;
+}
+.cta-btn{
+font-family:'Work Sans', sans-serif; font-weight:500; font-size:14px;
+background:var(--ink); color:#fff; border:none; border-radius:999px;
+padding:14px 32px; cursor:pointer; display:inline-flex; align-items:center; gap:10px;
+box-shadow: 0 10px 25px -8px rgba(62,50,56,0.3);
+transition: transform 0.3s ease, background 0.3s ease;
+}
+.cta-btn:hover{ transform:translateY(-3px); background:var(--accent); }
+
+/* ================= GALLERY PAGE ================= */
+.gallery-page-inner{
+min-height:100vh;
+display:flex; flex-direction:column; align-items:center; justify-content:center;
+position:relative;
+overflow-x:hidden;
+padding: 40px 0;
+background: var(--bg);
+}
+.back-btn{
+position:absolute; top:25px; left:3vw;
+background:none; border:1px solid var(--line); color:var(--ink-soft);
+font-family:'Work Sans', sans-serif; font-size:13px;
+border-radius:999px; padding:9px 18px; cursor:pointer;
+transition: border-color 0.25s ease, color 0.25s ease;
+z-index:35;
+}
+.back-btn:hover{ border-color:var(--accent); color:var(--ink); }
+
+.layout-marquee-wrapper {
+position: relative;
+width: 100vw;
+overflow: hidden;
+padding: 40px 0;
+mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+-webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+.gallery-header-static{
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+text-align: center;
+z-index: 30;
+pointer-events: none;
+background: transparent;
+padding: 10px;
+}
+.gallery-title{
+font-family:'Fraunces', serif;
+font-style:italic;
+font-weight:500;
+font-size:36px;
+line-height:1.15;
+margin-bottom:6px;
+color: var(--ink);
+}
+.gallery-sub{
+color:var(--ink-soft);
+font-size:13px;
+letter-spacing:0.03em;
+}
+
+.layout-marquee-track {
+display: flex;
+gap: 42px;
+width: max-content;
+animation: infiniteScroll 40s linear infinite;
+will-change: transform;
+}
+
+.layout-marquee-wrapper:hover .layout-marquee-track {
+animation-play-state: paused;
+}
+
+@keyframes infiniteScroll {
+0% { transform: translateX(0); }
+100% { transform: translateX(-50%); }
+}
+
+.gallery-layout{
+display:flex;
+align-items:center;
+gap: 42px;
+flex-shrink: 0;
+}
+
+.scattered-board{
+display:grid;
+grid-template-columns: repeat(3, 220px);
+grid-template-rows: 270px 270px;
+gap: 100px 42px;
+}
+
+.side-col{
+display:flex; flex-direction:column; gap: 100px;
+}
+
+.work-card{
+width: 220px;
+height: 270px;
+border-radius: 20px 10px 20px 10px;
+overflow: hidden;
+box-shadow: 0 10px 22px -10px rgba(62,50,56,0.18);
+cursor: pointer;
+position: relative;
+padding: 10px;
+display: flex;
+flex-direction: column;
+border: 1px solid rgba(62, 50, 56, 0.15);
+transition: transform 0.35s cubic-bezier(.2,.9,.25,1), box-shadow 0.35s ease, z-index 0.2s;
+transform: translateY(var(--offset, 0px));
+}
+
+.work-card:hover, .work-card:focus-visible{
+transform: translateY(calc(var(--offset, 0px) - 10px)) scale(1.08) !important;
+box-shadow: 0 20px 38px -12px rgba(62,50,56,0.32);
+z-index: 15 !important;
+}
+
+.card-img-box{
+width: 100%;
+height: 195px;
+border-radius: 12px 6px 12px 6px;
+overflow: hidden;
+background: #fff;
+border: 1px solid rgba(255,255,255,0.6);
+box-shadow: inset 0 0 10px rgba(0,0,0,0.03);
+}
+
+.card-img-box img{
+width: 100%;
+height: 100%;
+object-fit: cover;
+display: block;
+}
+
+.card-fill{
+flex: 1;
+display: flex; align-items: center; justify-content: flex-start;
+font-family: 'Fraunces', serif; font-style: italic; color: var(--ink);
+font-size: 14px; font-weight: 500;
+padding-top: 6px;
+}
+
+.c-1{ --offset:-3px; grid-row:1; }
+.c-2{ --offset: -20px; grid-row:1; }
+.c-3{ --offset:-3px; grid-row:1; }
+.c-4{ --offset: 8px; grid-row:2; }
+.c-5{ --offset: 22px; grid-row:2; }
+.c-6{ --offset:8px; grid-row:2; }
+.c-7{ --offset:-18px; }
+.c-8{ --offset:25px; }
+.c-9{ --offset:-20px; }
+.c-10{ --offset:30px; }
+
+.backdrop{
+position:fixed; inset:0; background:rgba(62,50,56,0.35);
+backdrop-filter: blur(6px);
+opacity:0; pointer-events:none; transition:opacity 0.35s ease; z-index:40;
+}
+.backdrop.active{ opacity:1; }
+
+.zoom-stage{
+position:fixed; top:50%; left:50%;
+transform:translate(-50%,-50%) scale(0.85);
+width:min(420px, 80vw); z-index:50;
+opacity:0; pointer-events:none;
+transition: transform 0.4s cubic-bezier(.2,.9,.25,1), opacity 0.35s ease;
+text-align:center;
+}
+.zoom-stage.active{ opacity:1; transform:translate(-50%,-50%) scale(1); }
+.zoom-frame{
+border-radius:28px 14px 28px 14px; overflow:hidden;
+box-shadow:0 50px 80px -20px rgba(0,0,0,0.45);
+aspect-ratio:4/5; display:flex; align-items:center; justify-content:center;
+background: #fff; padding: 12px;
+}
+.zoom-frame img{
+width: 100%; height: 100%; object-fit: cover; border-radius: 18px 10px 18px 10px;
+}
+.zoom-caption{ margin-top:18px; color:var(--ink); font-size:14px; font-weight: 500; }
+
+/* ================= MOBILE RESPONSIVE FIXES ================= */
+@media (max-width: 768px) {
+  .hero {
+    padding: 20px 10px;
+    min-height: auto;
+  }
+  
+  .portrait {
+    width: 250px;
+    height: 310px;
+  }
+
+  .hero-stage {
+    width: 100%;
+    height: 380px;
+    margin-top: 5px;
+  }
+
+  .name-line {
+    font-size: 30px;
+  }
+  .eyebrow-line {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+  }
+  .hook-line {
+    font-size: 15px;
+  }
+
+  /* Reduce sticker sizes slightly on mobile to prevent clutter */
+  .hero-sticker {
+    width: 35px !important;
+    opacity: 0.7;
+  }
+  .hs-delulu, .hs-girl, .hs-yapper {
+    width: 50px !important;
+  }
+
+  /* Make flowers compact on mobile */
+  .flower-btn {
+    width: 90px;
+    height: 90px;
+  }
+  .flower-label {
+    font-size: 9px;
+  }
+
+  /* Expand flowers cleanly on tap/focus for mobile */
+  .flower-btn:active, .flower-btn:focus-within {
+    width: 220px;
+    height: 160px;
+    z-index: 50;
+  }
+  .flower-btn:active .petals, .flower-btn:focus-within .petals {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  .flower-btn:active .flower-content, .flower-btn:focus-within .flower-content {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Adjust gallery marquee tracking & header for mobile */
+  .gallery-title {
+    font-size: 26px;
+  }
+  .gallery-sub {
+    font-size: 11px;
+  }
+  .layout-marquee-wrapper {
+    padding: 20px 0;
+  }
+}
+
+@media (prefers-reduced-motion:reduce){ *{ animation:none !important; transition:none !important; } }
+</style>
+</head>
+<body>
+
+<div class="page" id="hero-page">
+<section class="hero">
+
+<!-- All 12 Stickers (Girl, Yapper, & Delulu size increased) -->
+<div class="hero-sticker hs-boba"><img src="boba.png" alt="boba sticker"></div>
+<div class="hero-sticker hs-bunny"><img src="bunny.png" alt="bunny sticker"></div>
+<div class="hero-sticker hs-cat"><img src="cat.png" alt="cat sticker"></div>
+<div class="hero-sticker hs-chai"><img src="chai.png" alt="chai sticker"></div>
+<div class="hero-sticker hs-delulu"><img src="delulu.png" alt="delulu sticker"></div>
+<div class="hero-sticker hs-bear"><img src="bear.png" alt="bear sticker"></div>
+<div class="hero-sticker hs-girl"><img src="girl.png" alt="girl sticker"></div>
+<div class="hero-sticker hs-pills"><img src="pills.png" alt="pills sticker"></div>
+<div class="hero-sticker hs-camera"><img src="camera.png" alt="camera sticker"></div>
+<div class="hero-sticker hs-rainbow"><img src="rainbow.png" alt="rainbow sticker"></div>
+<div class="hero-sticker hs-tulip"><img src="tulip.png" alt="tulip sticker"></div>
+<div class="hero-sticker hs-yapper"><img src="yapper.png" alt="yapper sticker"></div>
+
+<div class="header-wrap">
+<div class="name-line">Hey, I'm Saita Ahuja</div>
+<div class="eyebrow-line">Graphic Designer &amp; Visual Storyteller</div>
+<div class="hook-line">chaotic good, but make it aesthetic</div>
+
+<div class="pastel-connect-wrapper" tabindex="0">
+<button class="pastel-pill-btn"><span class="btn-main">Lets Connect</span></button>
+<div class="pastel-dropdown">
+<div class="pastel-dropdown-title">Make Magic Happen</div>
+<a href="mailto:saitaahuja.work@gmail.com" class="connect-link-item">Email Me <span>↗</span></a>
+<a href="https://www.linkedin.com/in/saita-ahuja-329bb6270" target="_blank" rel="noopener noreferrer" class="connect-link-item">LinkedIn <span>↗</span></a>
+</div>
+</div>
+</div>
+
+<div class="hero-stage">
+<div class="portrait">
+<video autoplay muted loop playsinline preload="auto">
+<source src="saita_portrait_final.mp4" type="video/mp4">
+</video>
+</div>
+
+<div class="flower-btn fb-about" tabindex="0">
+<div class="petals"><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="flower-center"><span class="flower-label">About</span></div></div>
+<div class="flower-content">
+<div class="fc-title">About Me</div>
+<div class="fc-text">B.S. Computer Science and Information Technology (CS&amp;IT) student at NED University of Engineering and Technology. I bridge tech logic and visual design, solving real-world problems.</div>
+</div>
+</div>
+
+<div class="flower-btn fb-skills" tabindex="0">
+<div class="petals"><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="flower-center"><span class="flower-label">Skills</span></div></div>
+<div class="flower-content">
+<div class="fc-title">Skills</div>
+<div class="fc-text">Graphic Design &amp; Branding, Social Media Management, Visual Storytelling, Creative Direction, Layout Composition, Content Writing, Web Development concepts.</div>
+</div>
+</div>
+
+<div class="flower-btn fb-design" tabindex="0">
+<div class="petals"><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="flower-center"><span class="flower-label">Design Ethos</span></div></div>
+<div class="flower-content">
+<div class="fc-title">Design Ethos</div>
+<div class="fc-text">Where logic meets layout. Blending traditional design principles with next-gen AI design workflows and generative tools. Every pixel has a distinct purpose.</div>
+</div>
+</div>
+
+<div class="flower-btn fb-tools-right" tabindex="0">
+<div class="petals"><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="flower-center"><span class="flower-label">Tools</span></div></div>
+<div class="flower-content">
+<div class="fc-title">Tools</div>
+<div class="fc-text">Adobe Illustrator, Adobe Photoshop, Figma, Canva, and AI-assisted design generation workflows. Focused purely on high-end visual creation and brand assets.</div>
+</div>
+</div>
+
+<div class="flower-btn fb-experience" tabindex="0">
+<div class="petals"><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="flower-center"><span class="flower-label">Experience</span></div></div>
+<div class="flower-content">
+<div class="fc-title">Experience</div>
+<div class="fc-text">Graphic Designer and Visual Content Strategist. Specializing in high-converting brand identities, social media campaigns, editorial layouts, pitch decks, and packaging design.</div>
+</div>
+</div>
+
+<div class="flower-btn fb-interests" tabindex="0">
+<div class="petals"><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="petal"></div><div class="flower-center"><span class="flower-label">Interests</span></div></div>
+<div class="flower-content">
+<div class="fc-title">Interests</div>
+<div class="fc-text">Graphic design explorations, digital art, editorial layout styling, street and portrait photography, creative tech intersections.</div>
+</div>
+</div>
+</div>
+
+<div class="cta-wrap">
+<button class="cta-btn" onclick="goToGallery()">View my work <span>→</span></button>
+</div>
+
+</section>
+</div>
+
+<div class="page" id="gallery-page">
+<div class="gallery-page-inner">
+<button class="back-btn" onclick="goToHero()">← back</button>
+
+<div class="layout-marquee-wrapper">
+<div class="gallery-header-static">
+<div class="gallery-title">posts I have made</div>
+<div class="gallery-sub">hover any frame to bring it forward</div>
+</div>
+
+<div class="layout-marquee-track">
+<div class="gallery-layout">
+<div class="side-col left">
+<div class="work-card c-7" tabindex="0" data-caption="Engineered for radiance - high-end editorial serum campaign" style="background: linear-gradient(155deg,#B5654A,#D6A084);">
+<div class="card-img-box"><img src="serum.png" alt="Lumière Elixir"></div>
+<div class="card-fill">Skincare</div>
+</div>
+<div class="work-card c-8" tabindex="0" data-caption="Break the box - energetic urban footwear creative poster" style="background: linear-gradient(155deg,#E7C3AA,#D6A084);">
+<div class="card-img-box"><img src="shoes.png" alt="Sneakerhead"></div>
+<div class="card-fill">Break The Box</div>
+</div>
+</div>
+
+<div class="scattered-board">
+<div class="work-card c-1" tabindex="0" data-caption="Adopt Me! - Warm and loving pet awareness visual poster" style="background: linear-gradient(155deg,#E7C3AA,#D6A084);">
+<div class="card-img-box"><img src="Adoption.png" alt="Pet Adoption"></div>
+<div class="card-fill">Pet Adoption</div>
+</div>
+<div class="work-card c-2" tabindex="0" data-caption="For real, for real - soft pastel festive lawn collection campaign" style="background: linear-gradient(155deg,#D6A084,#EFE2D3);">
+<div class="card-img-box"><img src="girls.jpeg" alt="Ethnic Pret"></div>
+<div class="card-fill">Ethnic Pret</div>
+</div>
+<div class="work-card c-3" tabindex="0" data-caption="Pure golden nectar - luxury organic honey brand artwork" style="background: linear-gradient(155deg,#B5654A,#E7C3AA);">
+<div class="card-img-box"><img src="honey.png" alt="HIVEÉ Honey"></div>
+<div class="card-fill">HIVEÉ Honey</div>
+</div>
+<div class="work-card c-4" tabindex="0" data-caption="A splash of summer - vibrant tropical ice cream key visual" style="background: linear-gradient(155deg,#E7C3AA,#B5654A);">
+<div class="card-img-box"><img src="lychee.png" alt="Frost Fruit Lychee"></div>
+<div class="card-fill">Frost Fruit Lychee</div>
+</div>
+<div class="work-card c-5" tabindex="0" data-caption="Aesthetic composition - clean visual layout art direction" style="background: linear-gradient(155deg,#D6A084,#B5654A);">
+<div class="card-img-box"><img src="overall.png" alt="Brand System"></div>
+<div class="card-fill">Brand System</div>
+</div>
+<div class="work-card c-6" tabindex="0" data-caption="Juicy fruit explosion - refreshing summer treats ad poster" style="background: linear-gradient(155deg,#EFE2D3,#D6A084);">
+<div class="card-img-box"><img src="POPSICLE.png" alt="Frost Popsicle"></div>
+<div class="card-fill">Frost Popsicles</div>
+</div>
+</div>
+
+<div class="side-col right">
+<div class="work-card c-9" tabindex="0" data-caption="Rich and aromatic - premium spice packaging and branding visual" style="background: linear-gradient(155deg,#D6A084,#EFE2D3);">
+<div class="card-img-box"><img src="Spices.png" alt="Spices"></div>
+<div class="card-fill">Spices</div>
+</div>
+<div class="work-card c-10" tabindex="0" data-caption="Loaded with flavor - mouthwatering action food visual" style="background: linear-gradient(155deg,#B5654A,#D6A084);">
+<div class="card-img-box"><img src="tacos.png" alt="Loaded Tacos"></div>
+<div class="card-fill">Loaded Tacos</div>
+</div>
+</div>
+</div>
+
+<!-- Duplicate Layout for Marquee -->
+<div class="gallery-layout">
+<div class="side-col left">
+<div class="work-card c-7" tabindex="0" data-caption="Engineered for radiance - high-end editorial serum campaign" style="background: linear-gradient(155deg,#B5654A,#D6A084);">
+<div class="card-img-box"><img src="serum.png" alt="Lumière Elixir"></div>
+<div class="card-fill">Skincare</div>
+</div>
+<div class="work-card c-8" tabindex="0" data-caption="Break the box - energetic urban footwear creative poster" style="background: linear-gradient(155deg,#E7C3AA,#D6A084);">
+<div class="card-img-box"><img src="shoes.png" alt="Sneakerhead"></div>
+<div class="card-fill">Break The Box</div>
+</div>
+</div>
+
+<div class="scattered-board">
+<div class="work-card c-1" tabindex="0" data-caption="Adopt Me! - Warm and loving pet awareness visual poster" style="background: linear-gradient(155deg,#E7C3AA,#D6A084);">
+<div class="card-img-box"><img src="Adoption.png" alt="Pet Adoption"></div>
+<div class="card-fill">Pet Adoption</div>
+</div>
+<div class="work-card c-2" tabindex="0" data-caption="For real, for real - soft pastel festive lawn collection campaign" style="background: linear-gradient(155deg,#D6A084,#EFE2D3);">
+<div class="card-img-box"><img src="girls.jpeg" alt="Ethnic Pret"></div>
+<div class="card-fill">Ethnic Pret</div>
+</div>
+<div class="work-card c-3" tabindex="0" data-caption="Pure golden nectar - luxury organic honey brand artwork" style="background: linear-gradient(155deg,#B5654A,#E7C3AA);">
+<div class="card-img-box"><img src="honey.png" alt="HIVEÉ Honey"></div>
+<div class="card-fill">HIVEÉ Honey</div>
+</div>
+<div class="work-card c-4" tabindex="0" data-caption="A splash of summer - vibrant tropical ice cream key visual" style="background: linear-gradient(155deg,#E7C3AA,#B5654A);">
+<div class="card-img-box"><img src="lychee.png" alt="Frost Fruit Lychee"></div>
+<div class="card-fill">Frost Fruit Lychee</div>
+</div>
+<div class="work-card c-5" tabindex="0" data-caption="Aesthetic composition - clean visual layout art direction" style="background: linear-gradient(155deg,#D6A084,#B5654A);">
+<div class="card-img-box"><img src="overall.png" alt="Brand System"></div>
+<div class="card-fill">Brand System</div>
+</div>
+<div class="work-card c-6" tabindex="0" data-caption="Juicy fruit explosion - refreshing summer treats ad poster" style="background: linear-gradient(155deg,#EFE2D3,#D6A084);">
+<div class="card-img-box"><img src="POPSICLE.png" alt="Frost Popsicle"></div>
+<div class="card-fill">Frost Popsicles</div>
+</div>
+</div>
+
+<div class="side-col right">
+<div class="work-card c-9" tabindex="0" data-caption="Rich and aromatic - premium spice packaging and branding visual" style="background: linear-gradient(155deg,#D6A084,#EFE2D3);">
+<div class="card-img-box"><img src="Spices.png" alt="Spices"></div>
+<div class="card-fill">Spices</div>
+</div>
+<div class="work-card c-10" tabindex="0" data-caption="Loaded with flavor - mouthwatering action food visual" style="background: linear-gradient(155deg,#B5654A,#D6A084);">
+<div class="card-img-box"><img src="tacos.png" alt="Loaded Tacos"></div>
+<div class="card-fill">Loaded Tacos</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="backdrop" id="backdrop"></div>
+<div class="zoom-stage" id="zoomStage">
+<div class="zoom-frame" id="zoomFrame"><img src="" id="zoomImg" alt=""></div>
+<div class="zoom-caption" id="zoomCaption"></div>
+</div>
+
+<script>
+function goToGallery(){
+document.getElementById('hero-page').style.display='none';
+const g = document.getElementById('gallery-page');
+g.style.display='flex'; g.classList.add('fade-in');
+window.scrollTo(0,0);
+}
+function goToHero(){
+document.getElementById('gallery-page').style.display='none';
+const h = document.getElementById('hero-page');
+h.style.display='block'; h.classList.add('fade-in');
+window.scrollTo(0,0);
+}
+
+const backdrop = document.getElementById('backdrop');
+const stage = document.getElementById('zoomStage');
+const zoomImg = document.getElementById('zoomImg');
+const caption = document.getElementById('zoomCaption');
+
+document.querySelectorAll('.work-card').forEach(card=>{
+const show = (_, cardEl = card)=>{
+if(window.innerWidth <= 960) return;
+const imgSrc = cardEl.querySelector('img').src;
+zoomImg.src = imgSrc;
+caption.textContent = cardEl.dataset.caption;
+backdrop.classList.add('active');
+stage.classList.add('active');
+};
+const hide = ()=>{
+backdrop.classList.remove('active');
+stage.classList.remove('active');
+};
+card.addEventListener('mouseenter', (e) => show(e, card));
+card.addEventListener('mouseleave', hide);
+card.addEventListener('focus', (e) => show(e, card));
+card.addEventListener('blur', hide);
+});
+</script>
+
+</body>
+</html>
