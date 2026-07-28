@@ -328,6 +328,22 @@ background: var(--accent);
 color: #fff;
 }
 
+/* Minimalist Aesthetic Arrow Styling for Links */
+.connect-link-item svg.aesthetic-arrow {
+width: 14px;
+height: 14px;
+stroke: var(--accent);
+stroke-width: 2;
+fill: none;
+stroke-linecap: round;
+stroke-linejoin: round;
+transition: stroke 0.2s;
+}
+
+.connect-link-item:hover svg.aesthetic-arrow {
+stroke: #fff;
+}
+
 /* ---------- Bottom CTA Wrap ---------- */
 .cta-wrap{
 text-align:center;
@@ -623,8 +639,8 @@ width: 100%; height: 100%; object-fit: cover; border-radius: 18px 10px 18px 10px
 <button class="pastel-pill-btn"><span class="btn-main">Lets Connect</span></button>
 <div class="pastel-dropdown">
 <div class="pastel-dropdown-title">Make Magic Happen</div>
-<a href="mailto:saitaahuja.work@gmail.com" class="connect-link-item">Email Me <span>↗</span></a>
-<a href="https://www.linkedin.com/in/saita-ahuja-329bb6270" target="_blank" rel="noopener noreferrer" class="connect-link-item">LinkedIn <span>↗</span></a>
+<a href="mailto:saitaahuja.work@gmail.com" class="connect-link-item">Email Me <svg class="aesthetic-arrow" viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg></a>
+<a href="https://www.linkedin.com/in/saita-ahuja-329bb6270" target="_blank" rel="noopener noreferrer" class="connect-link-item">LinkedIn <svg class="aesthetic-arrow" viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg></a>
 </div>
 </div>
 </div>
@@ -886,12 +902,40 @@ document.addEventListener("keydown",function(e){
     if(e.key==="Escape") closeZoom();
 });
 
-/* ---------- Standalone Pure Outline Vector Bow Floating Trail (PAGE 1 ONLY) ---------- */
+/* ---------- Standalone Pure Outline Vector Bow Floating Trail (PAGE 1 ONLY) with Smooth Mobile Loop Support ---------- */
 let lastX = 0, lastY = 0;
+let currentX = 0, currentY = 0;
+let isMoving = false;
 let throttleTimer = false;
 
+function spawnBow(x, y) {
+const heroPage = document.getElementById('hero-page');
+if (heroPage.style.display === 'none') return;
+
+const trailBow = document.createElement('div');
+trailBow.className = 'trail-bow';
+trailBow.innerHTML = `<svg viewBox="0 0 24 24"><path d="M12 12c-3-4-8-4-8-1s5 3 8 1z"/><path d="M12 12c3-4 8-4 8-1s-5 3-8 1z"/><path d="M10.5 13.5l-3 6m3-6l3 6"/></svg>`;
+trailBow.style.left = x + 'px';
+trailBow.style.top = y + 'px';
+document.body.appendChild(trailBow);
+
+requestAnimationFrame(() => {
+trailBow.classList.add('active');
+});
+
+setTimeout(() => {
+trailBow.style.transform = `translate(-50%, -70px) scale(0.6) rotate(${Math.random() * 40 - 20}deg)`;
+trailBow.style.opacity = '0';
+}, 100);
+
+setTimeout(() => {
+trailBow.remove();
+}, 900);
+}
+
 document.addEventListener('mousemove', (e) => {
-// Check if Page 1 (hero-page) is active/visible
+currentX = e.clientX;
+currentY = e.clientY;
 const heroPage = document.getElementById('hero-page');
 if (heroPage.style.display === 'none') return;
 
@@ -900,70 +944,55 @@ if (distance > 65 && !throttleTimer) {
 lastX = e.clientX;
 lastY = e.clientY;
 throttleTimer = true;
-
-const trailBow = document.createElement('div');
-trailBow.className = 'trail-bow';
-trailBow.innerHTML = `<svg viewBox="0 0 24 24"><path d="M12 12c-3-4-8-4-8-1s5 3 8 1z"/><path d="M12 12c3-4 8-4 8-1s-5 3-8 1z"/><path d="M10.5 13.5l-3 6m3-6l3 6"/></svg>`;
-trailBow.style.left = e.clientX + 'px';
-trailBow.style.top = e.clientY + 'px';
-document.body.appendChild(trailBow);
-
-requestAnimationFrame(() => {
-trailBow.classList.add('active');
-});
-
-setTimeout(() => {
-trailBow.style.transform = `translate(-50%, -70px) scale(0.6) rotate(${Math.random() * 40 - 20}deg)`;
-trailBow.style.opacity = '0';
-}, 100);
-
-setTimeout(() => {
-trailBow.remove();
-}, 900);
-
-setTimeout(() => {
-throttleTimer = false;
-}, 220);
+spawnBow(e.clientX, e.clientY);
+setTimeout(() => { throttleTimer = false; }, 220);
 }
 });
 
-// Mobile touch support for trailing bows (PAGE 1 ONLY)
 document.addEventListener('touchmove', (e) => {
 const heroPage = document.getElementById('hero-page');
 if (heroPage.style.display === 'none') return;
 
-const touch = e.touches[0];
-const distance = Math.hypot(touch.clientX - lastX, touch.clientY - lastY);
-if (distance > 50 && !throttleTimer) {
-lastX = touch.clientX;
-lastY = touch.clientY;
-throttleTimer = true;
-
-const trailBow = document.createElement('div');
-trailBow.className = 'trail-bow';
-trailBow.innerHTML = `<svg viewBox="0 0 24 24"><path d="M12 12c-3-4-8-4-8-1s5 3 8 1z"/><path d="M12 12c3-4 8-4 8-1s-5 3-8 1z"/><path d="M10.5 13.5l-3 6m3-6l3 6"/></svg>`;
-trailBow.style.left = touch.clientX + 'px';
-trailBow.style.top = touch.clientY + 'px';
-document.body.appendChild(trailBow);
-
-requestAnimationFrame(() => {
-trailBow.classList.add('active');
-});
-
-setTimeout(() => {
-trailBow.style.transform = `translate(-50%, -70px) scale(0.6) rotate(${Math.random() * 40 - 20}deg)`;
-trailBow.style.opacity = '0';
-}, 100);
-
-setTimeout(() => {
-trailBow.remove();
-}, 900);
-
-setTimeout(() => {
-throttleTimer = false;
-}, 250);
+if (e.touches && e.touches[0]) {
+currentX = e.touches[0].clientX;
+currentY = e.touches[0].clientY;
+isMoving = true;
 }
 }, {passive: true});
+
+document.addEventListener('touchstart', (e) => {
+const heroPage = document.getElementById('hero-page');
+if (heroPage.style.display === 'none') return;
+
+if (e.touches && e.touches[0]) {
+currentX = e.touches[0].clientX;
+currentY = e.touches[0].clientY;
+lastX = currentX;
+lastY = currentY;
+spawnBow(currentX, currentY);
+}
+}, {passive: true});
+
+document.addEventListener('touchend', () => {
+isMoving = false;
+});
+
+// RequestAnimationFrame loop for ultra-smooth buttery tracking on mobile touch devices
+function mobileTrailLoop() {
+const heroPage = document.getElementById('hero-page');
+if (heroPage && heroPage.style.display !== 'none' && isMoving) {
+const distance = Math.hypot(currentX - lastX, currentY - lastY);
+if (distance > 45 && !throttleTimer) {
+lastX = currentX;
+lastY = currentY;
+throttleTimer = true;
+spawnBow(currentX, currentY);
+setTimeout(() => { throttleTimer = false; }, 180);
+}
+}
+requestAnimationFrame(mobileTrailLoop);
+}
+requestAnimationFrame(mobileTrailLoop);
 </script>
 
 </body>
