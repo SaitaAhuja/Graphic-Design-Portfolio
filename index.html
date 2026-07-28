@@ -183,12 +183,12 @@ padding-right: 2px;
 position: fixed;
 pointer-events: none;
 z-index: 9999;
-width: 32px;
-height: 32px;
+width: 36px;
+height: 36px;
 user-select: none;
-transform: translate(-50%, -50%) scale(0.2) rotate(-15deg);
+transform: translate(-50%, -50%) scale(0.3) rotate(-15deg);
 opacity: 0;
-transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.8s ease;
+transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.6s ease;
 }
 
 .trail-bow svg {
@@ -199,12 +199,12 @@ stroke: #B5654A;
 stroke-width: 2.2;
 stroke-linecap: round;
 stroke-linejoin: round;
-filter: drop-shadow(0 2px 4px rgba(62,50,56,0.08));
+filter: drop-shadow(0 2px 5px rgba(62,50,56,0.12));
 }
 
 .trail-bow.active {
-opacity: 0.9;
-transform: translate(-50%, -50%) scale(1) rotate(12deg);
+opacity: 0.95;
+transform: translate(-50%, -50%) scale(1) rotate(10deg);
 }
 
 /* ---------- Top Header Block ---------- */
@@ -902,15 +902,15 @@ document.addEventListener("keydown",function(e){
     if(e.key==="Escape") closeZoom();
 });
 
-/* ---------- Standalone Pure Outline Vector Bow Floating Trail (PAGE 1 ONLY) with Smooth Mobile Loop Support ---------- */
+/* ---------- Standalone Pure Outline Vector Bow Floating Trail (PAGE 1 ONLY) - Optimized Mobile Touch Emission ---------- */
 let lastX = 0, lastY = 0;
 let currentX = 0, currentY = 0;
-let isMoving = false;
+let isTouching = false;
 let throttleTimer = false;
 
 function spawnBow(x, y) {
 const heroPage = document.getElementById('hero-page');
-if (heroPage.style.display === 'none') return;
+if (!heroPage || heroPage.style.display === 'none') return;
 
 const trailBow = document.createElement('div');
 trailBow.className = 'trail-bow';
@@ -926,45 +926,32 @@ trailBow.classList.add('active');
 setTimeout(() => {
 trailBow.style.transform = `translate(-50%, -70px) scale(0.6) rotate(${Math.random() * 40 - 20}deg)`;
 trailBow.style.opacity = '0';
-}, 100);
+}, 80);
 
 setTimeout(() => {
 trailBow.remove();
-}, 900);
+}, 700);
 }
 
+// Mouse tracking
 document.addEventListener('mousemove', (e) => {
-currentX = e.clientX;
-currentY = e.clientY;
 const heroPage = document.getElementById('hero-page');
-if (heroPage.style.display === 'none') return;
+if (!heroPage || heroPage.style.display === 'none') return;
 
 const distance = Math.hypot(e.clientX - lastX, e.clientY - lastY);
-if (distance > 65 && !throttleTimer) {
+if (distance > 35 && !throttleTimer) {
 lastX = e.clientX;
 lastY = e.clientY;
 throttleTimer = true;
 spawnBow(e.clientX, e.clientY);
-setTimeout(() => { throttleTimer = false; }, 220);
+setTimeout(() => { throttleTimer = false; }, 120);
 }
 });
 
-document.addEventListener('touchmove', (e) => {
-const heroPage = document.getElementById('hero-page');
-if (heroPage.style.display === 'none') return;
-
-if (e.touches && e.touches[0]) {
-currentX = e.touches[0].clientX;
-currentY = e.touches[0].clientY;
-isMoving = true;
-}
-}, {passive: true});
-
+// Optimized Touch Tracking
 document.addEventListener('touchstart', (e) => {
-const heroPage = document.getElementById('hero-page');
-if (heroPage.style.display === 'none') return;
-
 if (e.touches && e.touches[0]) {
+isTouching = true;
 currentX = e.touches[0].clientX;
 currentY = e.touches[0].clientY;
 lastX = currentX;
@@ -973,26 +960,33 @@ spawnBow(currentX, currentY);
 }
 }, {passive: true});
 
-document.addEventListener('touchend', () => {
-isMoving = false;
-});
+document.addEventListener('touchmove', (e) => {
+if (e.touches && e.touches[0]) {
+isTouching = true;
+currentX = e.touches[0].clientX;
+currentY = e.touches[0].clientY;
+}
+}, {passive: true});
 
-// RequestAnimationFrame loop for ultra-smooth buttery tracking on mobile touch devices
-function mobileTrailLoop() {
+document.addEventListener('touchend', () => { isTouching = false; });
+document.addEventListener('touchcancel', () => { isTouching = false; });
+
+// Continuous smooth touch loop for mobile tracking under finger
+function mobileLoop() {
 const heroPage = document.getElementById('hero-page');
-if (heroPage && heroPage.style.display !== 'none' && isMoving) {
+if (heroPage && heroPage.style.display !== 'none' && isTouching) {
 const distance = Math.hypot(currentX - lastX, currentY - lastY);
-if (distance > 45 && !throttleTimer) {
+if (distance > 15 && !throttleTimer) {
 lastX = currentX;
 lastY = currentY;
 throttleTimer = true;
 spawnBow(currentX, currentY);
-setTimeout(() => { throttleTimer = false; }, 180);
+setTimeout(() => { throttleTimer = false; }, 60);
 }
 }
-requestAnimationFrame(mobileTrailLoop);
+requestAnimationFrame(mobileLoop);
 }
-requestAnimationFrame(mobileTrailLoop);
+requestAnimationFrame(mobileLoop);
 </script>
 
 </body>
