@@ -186,7 +186,7 @@ z-index: 9999;
 width: 36px;
 height: 36px;
 user-select: none;
-transform: translate(-50%, -50%) scale(0.3) rotate(-15deg);
+transform: translate(-55%, -55%) scale(0.3) rotate(-15deg);
 opacity: 0;
 transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.4s ease;
 }
@@ -204,7 +204,7 @@ filter: drop-shadow(0 2px 5px rgba(62,50,56,0.12));
 
 .trail-bow.active {
 opacity: 0.95;
-transform: translate(-50%, -50%) scale(1) rotate(10deg);
+transform: translate(-55%, -55%) scale(1) rotate(10deg);
 }
 
 /* ---------- Top Header Block ---------- */
@@ -361,7 +361,7 @@ transition: transform 0.3s ease, background 0.3s ease;
 }
 .cta-btn:hover{ transform:translateY(-3px); background:var(--accent); }
 
-/* ================= GALLERY PAGE (IDENTICAL HORIZONTAL MARQUEE ON MOBILE & LAPTOP) ================= */
+/* ================= GALLERY PAGE ================= */
 .gallery-page-inner{
 min-height:100vh;
 display:flex; flex-direction:column; align-items:center; justify-content:center;
@@ -421,10 +421,18 @@ gap: 42px;
 width: max-content;
 animation: infiniteScroll 40s linear infinite;
 will-change: transform;
+animation-play-state: running !important;
 }
 
-.layout-marquee-wrapper:hover .layout-marquee-track {
-animation-play-state: paused;
+/* MARQUEE PAUSES ONLY ON DESKTOP HOVER OR WHEN ZOOM MODAL IS ACTIVE */
+@media (hover: hover) {
+  .layout-marquee-wrapper:hover .layout-marquee-track {
+    animation-play-state: paused !important;
+  }
+}
+
+.layout-marquee-wrapper.zoom-active .layout-marquee-track {
+  animation-play-state: paused !important;
 }
 
 @keyframes infiniteScroll {
@@ -467,18 +475,11 @@ transform: translateY(var(--offset, 0px));
 }
 
 @media (hover: hover) {
-.work-card:hover, .work-card:focus-visible{
-transform: translateY(calc(var(--offset, 0px) - 10px)) scale(1.08) !important;
-box-shadow: 0 20px 38px -12px rgba(62,50,56,0.32);
-z-index: 15 !important;
-}
-}
-
-@media (hover: none) {
-.work-card:hover {
-transform: translateY(var(--offset, 0px)) !important;
-box-shadow: 0 10px 22px -10px rgba(62,50,56,0.18);
-}
+  .work-card:hover, .work-card:focus-visible{
+    transform: translateY(calc(var(--offset, 0px) - 10px)) scale(1.08) !important;
+    box-shadow: 0 20px 38px -12px rgba(62,50,56,0.32);
+    z-index: 15 !important;
+  }
 }
 
 .card-img-box{
@@ -636,7 +637,7 @@ width: 100%; height: 100%; object-fit: cover; border-radius: 18px 10px 18px 10px
 <div class="hook-line">chaotic good, but make it aesthetic</div>
 
 <div class="pastel-connect-wrapper" tabindex="0">
-<button class="pastel-pill-btn"><span class="btn-main">Let's Connect</span></button>
+<button class="pastel-pill-btn"><span class="btn-main">Lets Connect</span></button>
 <div class="pastel-dropdown">
 <div class="pastel-dropdown-title">Make Magic Happen</div>
 <a href="mailto:saitaahuja.work@gmail.com" class="connect-link-item">Email Me <svg class="aesthetic-arrow" viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg></a>
@@ -712,7 +713,7 @@ width: 100%; height: 100%; object-fit: cover; border-radius: 18px 10px 18px 10px
 <div class="gallery-page-inner">
 <button class="back-btn" onclick="goToHero()">← back</button>
 
-<div class="layout-marquee-wrapper">
+<div class="layout-marquee-wrapper" id="marqueeWrapper">
 <div class="gallery-header-static">
 <div class="gallery-title">posts I have made</div>
 <div class="gallery-sub">hover any frame to bring it forward</div>
@@ -850,6 +851,7 @@ const backdrop = document.getElementById('backdrop');
 const stage = document.getElementById('zoomStage');
 const zoomImg = document.getElementById('zoomImg');
 const caption = document.getElementById('zoomCaption');
+const marqueeWrapper = document.getElementById('marqueeWrapper');
 
 function openZoom(cardEl) {
 const imgSrc = cardEl.querySelector('img').src;
@@ -857,13 +859,17 @@ zoomImg.src = imgSrc;
 caption.textContent = cardEl.dataset.caption;
 backdrop.classList.add('active');
 stage.classList.add('active');
+marqueeWrapper.classList.add('zoom-active'); 
 }
 
 function closeZoom() {
 backdrop.classList.remove('active');
 stage.classList.remove('active');
+marqueeWrapper.classList.remove('zoom-active'); 
 }
 
+// On Desktop: Hover opens preview popup & pauses marquee; mouseleave closes preview
+// On Mobile/Touch: Click/Tap opens preview popup
 document.querySelectorAll('.work-card').forEach(card => {
 card.addEventListener('mouseenter', (e) => {
 if (window.innerWidth > 960) openZoom(card);
@@ -871,19 +877,15 @@ if (window.innerWidth > 960) openZoom(card);
 card.addEventListener('mouseleave', () => {
 if (window.innerWidth > 960) closeZoom();
 });
-card.addEventListener('focus', (e) => {
-if (window.innerWidth > 960) openZoom(card);
-});
-card.addEventListener('blur', () => {
-if (window.innerWidth > 960) closeZoom();
-});
 
 card.addEventListener('click', (e) => {
 e.stopPropagation();
+if (window.innerWidth <= 960) {
 if (stage.classList.contains('active')) {
 closeZoom();
 } else {
 openZoom(card);
+}
 }
 });
 });
@@ -912,8 +914,11 @@ function spawnBow(x, y) {
 const heroPage = document.getElementById('hero-page');
 if (!heroPage || heroPage.style.display === 'none') return;
 
+// Do not spawn bows if hovering/touching over flower buttons
+const elementAtPoint = document.elementFromPoint(x, y);
+if (elementAtPoint && elementAtPoint.closest('.flower-btn')) return;
+
 const now = Date.now();
-// Throttle frequency so bows drop slower and cleaner
 if (now - lastSpawnTime < 130) return; 
 lastSpawnTime = now;
 
@@ -929,7 +934,7 @@ trailBow.classList.add('active');
 });
 
 setTimeout(() => {
-trailBow.style.transform = `translate(-50%, -30px) scale(0.4) rotate(${Math.random() * 40 - 20}deg)`;
+trailBow.style.transform = `translate(-55%, -35px) scale(0.4) rotate(${Math.random() * 40 - 20}deg)`;
 trailBow.style.opacity = '0';
 }, 250);
 
@@ -967,7 +972,7 @@ spawnBow(activeX, activeY);
 window.addEventListener('touchend', () => { trackingActive = true; });
 window.addEventListener('touchcancel', () => { trackingActive = true; });
 
-// Slowed down interval loop for desktop & mobile continuous loop support
+// Continuous interval loop for desktop & mobile touch
 setInterval(() => {
 const heroPage = document.getElementById('hero-page');
 if (heroPage && heroPage.style.display !== 'none' && trackingActive) {
