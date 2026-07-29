@@ -188,7 +188,7 @@ height: 36px;
 user-select: none;
 transform: translate(-50%, -50%) scale(0.3) rotate(-15deg);
 opacity: 0;
-transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.8s ease;
+transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.4s ease;
 }
 
 .trail-bow svg {
@@ -636,7 +636,7 @@ width: 100%; height: 100%; object-fit: cover; border-radius: 18px 10px 18px 10px
 <div class="hook-line">chaotic good, but make it aesthetic</div>
 
 <div class="pastel-connect-wrapper" tabindex="0">
-<button class="pastel-pill-btn"><span class="btn-main">Lets Connect</span></button>
+<button class="pastel-pill-btn"><span class="btn-main">Let's Connect</span></button>
 <div class="pastel-dropdown">
 <div class="pastel-dropdown-title">Make Magic Happen</div>
 <a href="mailto:saitaahuja.work@gmail.com" class="connect-link-item">Email Me <svg class="aesthetic-arrow" viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg></a>
@@ -914,7 +914,7 @@ if (!heroPage || heroPage.style.display === 'none') return;
 
 const now = Date.now();
 // Throttle frequency so bows drop slower and cleaner
-if (now - lastSpawnTime < 110) return; 
+if (now - lastSpawnTime < 130) return; 
 lastSpawnTime = now;
 
 const trailBow = document.createElement('div');
@@ -929,13 +929,13 @@ trailBow.classList.add('active');
 });
 
 setTimeout(() => {
-trailBow.style.transform = `translate(-50%, -40px) scale(0.5) rotate(${Math.random() * 40 - 20}deg)`;
+trailBow.style.transform = `translate(-50%, -30px) scale(0.4) rotate(${Math.random() * 40 - 20}deg)`;
 trailBow.style.opacity = '0';
-}, 300);
+}, 250);
 
 setTimeout(() => {
 trailBow.remove();
-}, 900);
+}, 650);
 }
 
 // Mouse Event
@@ -964,16 +964,16 @@ spawnBow(activeX, activeY);
 }
 }, {passive: true});
 
-window.addEventListener('touchend', () => { trackingActive = false; });
-window.addEventListener('touchcancel', () => { trackingActive = false; });
+window.addEventListener('touchend', () => { trackingActive = true; });
+window.addEventListener('touchcancel', () => { trackingActive = true; });
 
-// Slowed down interval loop for desktop
+// Slowed down interval loop for desktop & mobile continuous loop support
 setInterval(() => {
 const heroPage = document.getElementById('hero-page');
-if (heroPage && heroPage.style.display !== 'none' && trackingActive && !('ontouchstart' in window)) {
+if (heroPage && heroPage.style.display !== 'none' && trackingActive) {
 spawnBow(activeX, activeY);
 }
-}, 120);
+}, 140);
 </script>
 
 </body>
