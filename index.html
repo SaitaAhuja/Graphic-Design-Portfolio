@@ -33,7 +33,6 @@ overflow-x:hidden;
 .fade-in{ animation: fadeIn 0.6s ease both; }
 @keyframes fadeIn{ from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
 
-/* ================= HERO ================= */
 .hero{
 min-height:100vh;
 display:flex; flex-direction:column; align-items:center; justify-content:center;
@@ -43,7 +42,6 @@ position: relative;
 background: var(--bg);
 }
 
-/* PERFECT CAMOUFLAGED STICKERS */
 .hero-sticker {
 position: absolute;
 width: 58px;
@@ -79,7 +77,6 @@ margin-top: -30px;
 z-index: 5;
 }
 
-/* center portrait */
 .portrait{
 width:380px; height:460px;
 border-radius: 0;
@@ -96,7 +93,6 @@ border: none;
 outline: none;
 }
 
-/* ---------- flower buttons ---------- */
 .flower-btn{
 position:absolute;
 width:125px; height:125px;
@@ -161,7 +157,6 @@ padding-right: 2px;
 .flower-btn:hover .petals, .flower-btn:focus-within .petals{ opacity:0; transform:scale(0.6); }
 .flower-btn:hover .flower-content, .flower-btn:focus-within .flower-content{ opacity:1; pointer-events:auto; }
 
-/* Flower positions */
 .fb-about{ top:3%; left:5%; }
 .fb-skills{ top:6%; right:3%; }
 .fb-interests{ bottom:2%; left:2%; }
@@ -178,7 +173,6 @@ padding-right: 2px;
 .fb-interests{ animation-delay:3s; }
 .flower-btn:hover{ animation:none; }
 
-/* ---------- ELEGANT SVG VECTOR OUTLINE BOW TRAIL (PAGE 1 ONLY) ---------- */
 .trail-bow {
 position: fixed;
 pointer-events: none;
@@ -207,7 +201,6 @@ opacity: 0.95;
 transform: translate(-55%, -55%) scale(1) rotate(10deg);
 }
 
-/* ---------- Top Header Block ---------- */
 .header-wrap{
 text-align:center;
 margin-bottom:10px;
@@ -237,7 +230,6 @@ color:var(--ink-soft);
 margin-bottom: 12px;
 }
 
-/* ---------- Pastel Pill Contact Trigger ---------- */
 .pastel-connect-wrapper{
 display: inline-block;
 position: relative;
@@ -328,7 +320,6 @@ background: var(--accent);
 color: #fff;
 }
 
-/* Minimalist Aesthetic Arrow Styling for Links */
 .connect-link-item svg.aesthetic-arrow {
 width: 14px;
 height: 14px;
@@ -344,7 +335,6 @@ transition: stroke 0.2s;
 stroke: #fff;
 }
 
-/* ---------- Bottom CTA Wrap ---------- */
 .cta-wrap{
 text-align:center;
 margin-top: -70px;
@@ -361,7 +351,6 @@ transition: transform 0.3s ease, background 0.3s ease;
 }
 .cta-btn:hover{ transform:translateY(-3px); background:var(--accent); }
 
-/* ================= GALLERY PAGE ================= */
 .gallery-page-inner{
 min-height:100vh;
 display:flex; flex-direction:column; align-items:center; justify-content:center;
@@ -424,7 +413,6 @@ will-change: transform;
 animation-play-state: running !important;
 }
 
-/* MARQUEE PAUSES ONLY ON DESKTOP HOVER OR WHEN ZOOM MODAL IS ACTIVE */
 @media (hover: hover) {
   .layout-marquee-wrapper:hover .layout-marquee-track {
     animation-play-state: paused !important;
@@ -545,7 +533,6 @@ width: 100%; height: 100%; object-fit: cover; border-radius: 18px 10px 18px 10px
 }
 .zoom-caption{ margin-top:18px; color:var(--ink); font-size:14px; font-weight: 500; }
 
-/* ================= MOBILE RESPONSIVE HERO FIXES ================= */
 @media (max-width: 768px) {
   .hero {
     padding: 20px 10px;
@@ -617,7 +604,6 @@ width: 100%; height: 100%; object-fit: cover; border-radius: 18px 10px 18px 10px
 <div class="page" id="hero-page">
 <section class="hero">
 
-<!-- Perfectly Camouflaged Original Stickers -->
 <div class="hero-sticker hs-boba"><img src="boba.png" alt="boba sticker"></div>
 <div class="hero-sticker hs-bunny"><img src="bunny.png" alt="bunny sticker"></div>
 <div class="hero-sticker hs-cat"><img src="cat.png" alt="cat sticker"></div>
@@ -771,7 +757,6 @@ width: 100%; height: 100%; object-fit: cover; border-radius: 18px 10px 18px 10px
 </div>
 </div>
 
-<!-- Duplicate Layout for Marquee Loop -->
 <div class="gallery-layout">
 <div class="side-col left">
 <div class="work-card c-7" tabindex="0" data-caption="Engineered for radiance - high-end editorial serum campaign" style="background: linear-gradient(155deg,#B5654A,#D6A084);">
@@ -868,8 +853,6 @@ stage.classList.remove('active');
 marqueeWrapper.classList.remove('zoom-active'); 
 }
 
-// On Desktop: Hover opens preview popup & pauses marquee; mouseleave closes preview
-// On Mobile/Touch: Click/Tap opens preview popup
 document.querySelectorAll('.work-card').forEach(card => {
 card.addEventListener('mouseenter', (e) => {
 if (window.innerWidth > 960) openZoom(card);
@@ -904,7 +887,6 @@ document.addEventListener("keydown",function(e){
     if(e.key==="Escape") closeZoom();
 });
 
-/* ---------- SMOOTH & SLOWED DOWN MOBILE/DESKTOP BOW TRAIL ---------- */
 let activeX = window.innerWidth / 2;
 let activeY = window.innerHeight / 2;
 let trackingActive = false;
@@ -914,12 +896,11 @@ function spawnBow(x, y) {
 const heroPage = document.getElementById('hero-page');
 if (!heroPage || heroPage.style.display === 'none') return;
 
-// Do not spawn bows if hovering/touching over flower buttons
 const elementAtPoint = document.elementFromPoint(x, y);
-if (elementAtPoint && elementAtPoint.closest('.flower-btn')) return;
+if (elementAtPoint && (elementAtPoint.closest('.flower-btn') || elementAtPoint.closest('.pastel-connect-wrapper'))) return;
 
 const now = Date.now();
-if (now - lastSpawnTime < 130) return; 
+if (now - lastSpawnTime < 260) return; 
 lastSpawnTime = now;
 
 const trailBow = document.createElement('div');
@@ -936,21 +917,19 @@ trailBow.classList.add('active');
 setTimeout(() => {
 trailBow.style.transform = `translate(-55%, -35px) scale(0.4) rotate(${Math.random() * 40 - 20}deg)`;
 trailBow.style.opacity = '0';
-}, 250);
+}, 420);
 
 setTimeout(() => {
 trailBow.remove();
-}, 650);
+}, 1000);
 }
 
-// Mouse Event
 window.addEventListener('mousemove', (e) => {
 activeX = e.clientX;
 activeY = e.clientY;
 trackingActive = true;
 });
 
-// Touch Events
 window.addEventListener('touchstart', (e) => {
 if(e.touches && e.touches[0]){
 activeX = e.touches[0].clientX;
@@ -972,13 +951,12 @@ spawnBow(activeX, activeY);
 window.addEventListener('touchend', () => { trackingActive = true; });
 window.addEventListener('touchcancel', () => { trackingActive = true; });
 
-// Continuous interval loop for desktop & mobile touch
 setInterval(() => {
 const heroPage = document.getElementById('hero-page');
 if (heroPage && heroPage.style.display !== 'none' && trackingActive) {
 spawnBow(activeX, activeY);
 }
-}, 140);
+}, 260);
 </script>
 
 </body>
